@@ -16,41 +16,67 @@ describe("Gameboard", () => {
     expect(gameboard.ships.length).toBe(10);
   });
 
-  // test("it should return true if new coordinates of a ship are valid", () => {
-  //   expect(
-  //     gameboard.areValidCoordinates([
-  //       [0, 1],
-  //       [0, 2],
-  //       [0, 3],
-  //     ])
-  //   );
-  // });
+  test("it should throw an error if coordinates are not board size", () => {
+    let inputCases = [[[0, 10]], [[-1, 0]]];
+    inputCases.forEach((input) => {
+      expect(() => gameboard.placeShip(gameboard.ships[0], input)).toThrow(
+        "Invalid coordinates"
+      );
+    });
+  });
 
-  // test("it should report whether or not all of their ships have been suck", () => {
-  //   expect(gameboard.allSunk()).toBeFalsy();
-  // });
+  test("it should throw an error if coordinates are not in the valid distance", () => {
+    gameboard.placeShip(gameboard.ships[0], [[0, 9]]);
+    expect(() => gameboard.placeShip(gameboard.ships[1], [[1, 9]])).toThrow();
+  });
 
-  //   test("it should place a ship to the proper position", () => {
-  //     const ship = new Ship(1);
-  //     const spy = jest.spyOn(ship, "coordinate", "set");
-  //     gameboard.placeShip(ship, [1, 1]);
-  //     expect(spy).toHaveBeenCalled();
-  //     expect(gameboard.ships.length).toBe(1);
-  //   });
+  test("it should set new coordinates if they are valid", () => {
+    let inputCases = [
+      { ship: 0, coordinates: [[0, 9]] },
+      { ship: 1, coordinates: [[2, 9]] },
+      {
+        ship: 9,
+        coordinates: [
+          [6, 1],
+          [6, 2],
+          [6, 3],
+          [6, 4],
+        ],
+      },
+    ];
 
-  //   test("it should receive attacks to a ship", () => {
-  //     const ship = new Ship(1);
-  //     const spy = jest.spyOn(ship, "hit");
-  //     gameboard.placeShip(ship, [1, 1]);
-  //     gameboard.receiveAttack([1, 1]);
-  //     expect(spy).toHaveBeenCalled();
-  //   });
-  //   test("it should increase missed attacks/coordinates in case of failure", () => {
-  //     const ship = new Ship(1);
-  //     gameboard.placeShip(ship, [1, 1]);
-  //     gameboard.receiveAttack([0, 0]);
-  //     expect(gameboard.missedAttacks).toBe(1);
-  //     expect(gameboard.missedCoordinates.length).toBe(1);
-  //     expect(gameboard.missedCoordinates).toContainEqual([0, 0]);
-  //   });
+    inputCases.forEach((input) => {
+      gameboard.placeShip(gameboard.ships[input.ship], input.coordinates);
+      expect(gameboard.ships[input.ship].coordinates).toEqual(
+        input.coordinates
+      );
+    });
+  });
+
+  test("it should increase missed attacks/missed coordinates in case of failed attack", () => {
+    gameboard.receiveAttack([0, 9]);
+    expect(gameboard.missedAttacks).toBe(1);
+    expect(gameboard.missedCoordinates).toEqual([[0, 9]]);
+  });
+
+  test("it should receive attacks to a ship", () => {
+    const ship = gameboard.ships[0];
+    const spy = jest.spyOn(ship, "hit");
+    gameboard.placeShip(ship, [[1, 9]]);
+    gameboard.receiveAttack([1, 9]);
+    expect(spy).toHaveBeenCalledTimes(1);
+  });
+
+  test("it should return falsy if all sunk at the beginning", () => {
+    expect(gameboard.allSunk()).toBeFalsy();
+  });
+
+  test("it should return truthy if all are sunk", () => {
+    for (let i = 0; i < gameboard.ships.length; i++) {
+      for (let j = 0; j < gameboard.ships[i].length; j++) {
+        gameboard.ships[i].hit();
+      }
+    }
+    expect(gameboard.allSunk()).toBeTruthy();
+  });
 });

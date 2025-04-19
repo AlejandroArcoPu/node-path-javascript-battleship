@@ -14,7 +14,6 @@ class Gameboard {
     this._missedCoordinates = [];
     this._missedAttacks = 0;
     this._ships = this.createInitialShips();
-    this._coordinates = this.plainCoordinates();
   }
 
   get ships() {
@@ -41,9 +40,15 @@ class Gameboard {
     this._missedCoordinates.push(coordinate);
   }
 
-  plainCoordinates() {
+  calcDistance(coordinate1, coordinate2) {
+    const x = coordinate1[0] - coordinate2[0];
+    const y = coordinate1[1] - coordinate2[1];
+    return Math.sqrt(x * x + y * y);
+  }
+
+  plainCoordinates(ships) {
     const plainCoordinates = new Set();
-    this._ships.forEach((ship) => {
+    ships.forEach((ship) => {
       ship.coordinates.forEach((coordinate) =>
         plainCoordinates.add(JSON.stringify(coordinate))
       );
@@ -61,40 +66,13 @@ class Gameboard {
     return initialShips;
   }
 
-  allSunk() {}
-
-  placeShip(ship, coordinates) {}
-
-  placeRandomShips() {
-    let newRandomShips = [];
-    let copyOfShips = [...this._ships];
-    copyOfShips.forEach((ship) => {});
-    this._ships = newRandomShips;
-  }
-
-  receiveAttack(coordinate) {}
-
-  areValidCoordinates(newCoordinates) {
-    return newCoordinates.every((c) => {
-      let sumCoordinate = c[0] + c[1];
-      return [...this._coordinates].every((coordinate) => {
-        let coordinateAsArray = JSON.parse(coordinate);
-        let sumCoordinateAsArray = coordinateAsArray[0] + coordinateAsArray[1];
-        let result =
-          sumCoordinate > sumCoordinateAsArray
-            ? sumCoordinate - sumCoordinateAsArray
-            : sumCoordinateAsArray - sumCoordinate;
-        return result <= 1 ? false : true;
-      });
-    });
-  }
-
-  randomCoordinates(ship, orientation) {
+  randomCoordinates(ship) {
     let newCoordinates = [];
+    let orientation = Math.round(Math.random());
     let x = Math.floor(Math.random() * GAMEBOARD_SIZE_MAX + 1);
     let y = Math.floor(Math.random() * GAMEBOARD_SIZE_MAX + 1);
     for (let i = 0; i < ship.length; i++) {
-      if (orientation === "vertical") {
+      if (orientation === 0) {
         newCoordinates.push([x, y + i]);
       } else {
         newCoordinates.push([x + i, y]);
@@ -102,8 +80,89 @@ class Gameboard {
     }
     return newCoordinates;
   }
-}
 
-// let newGambeboard = new Gameboard();
-// console.log(newGambeboard.areValidCoordinates([[0, 9]]));
+  isInTheBoardSize(newCoordinates) {
+    return newCoordinates.every(
+      (newCoordinate) =>
+        newCoordinate[0] <= GAMEBOARD_SIZE_MAX &&
+        newCoordinate[0] >= GAMEBOARD_SIZE_MIN &&
+        newCoordinate[1] <= GAMEBOARD_SIZE_MAX &&
+        newCoordinate[1] >= GAMEBOARD_SIZE_MIN
+    );
+  }
+
+  isAtSafeDistance(newCoordinates, currentCoordinates) {
+    return newCoordinates.every((newCoordinate) => {
+      return [...currentCoordinates].every((currentCoordinate) => {
+        let coordinateAsArray = JSON.parse(currentCoordinate);
+        let distance = this.calcDistance(newCoordinate, coordinateAsArray);
+        return distance >= 2;
+      });
+    });
+  }
+
+  areValidCoordinates(newCoordinates, currentCoordinates) {
+    let plainCoordinates = this.plainCoordinates(currentCoordinates);
+    return (
+      this.isInTheBoardSize(newCoordinates) &&
+      this.isAtSafeDistance(newCoordinates, plainCoordinates)
+    );
+  }
+
+  placeRandomShips() {
+    let newRandomShips = [];
+    let attempts = 0;
+    const MAX_TRIES = 30;
+    for (let i = 0; i < BOATS_MAP.length; i++) {
+      for (let j = 0; j < BOATS_MAP[i].quantity; j++) {
+        attempts = 0;
+        let newShip = new Ship(BOATS_MAP[i].length);
+        let newCoordinates = this.randomCoordinates(newShip);
+        while (
+          !this.areValidCoordinates(newCoordinates, newRandomShips) &&
+          attempts < MAX_TRIES
+        ) {
+          newCoordinates = this.randomCoordinates(newShip);
+          attempts++;
+        }
+        if (attempts === MAX_TRIES) {
+          i = 0;
+          j = -1;
+          newRandomShips = [];
+        } else {
+          newShip.coordinates = newCoordinates;
+          newRandomShips.push(newShip);
+        }
+      }
+    }
+    this._ships = newRandomShips;
+  }
+
+  placeShip(ship, coordinates) {
+    if (!this.areValidCoordinates(coordinates, this._ships)) {
+      throw new Error("Invalid coordinates");
+    }
+    ship.coordinates = coordinates;
+  }
+
+  receiveAttack(coordinate) {
+    let attackedShip = this._ships.find((ship) =>
+      ship.coordinates.find(
+        (c) => c[0] === coordinate[0] && c[1] === coordinate[1]
+      )
+    );
+    if (!attackedShip) {
+      let oldMissedAttacks = this.missedAttacks;
+      oldMissedAttacks++;
+      this.missedAttacks = oldMissedAttacks;
+      this.missedCoordinates = coordinate;
+    } else {
+      attackedShip.hit();
+    }
+  }
+
+  allSunk() {
+    return this._ships.every((ship) => ship.hits === ship.length);
+  }
+}
 export default Gameboard;

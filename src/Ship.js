@@ -67,6 +67,10 @@ class Ship {
     return this._hits;
   }
 
+  set hits(hits) {
+    this._hits = hits;
+  }
+
   hit() {
     this._hits++;
   }
