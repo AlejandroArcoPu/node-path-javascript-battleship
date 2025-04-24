@@ -3,9 +3,14 @@ import Gameboard from "./Gameboard";
 const TYPE_PLAYERS = ["computer", "human"];
 
 class Player {
-  constructor() {
-    this._type = "human";
+  constructor(name, type) {
+    this._name = name;
+    this._type = type;
     this._gameboard = new Gameboard();
+  }
+
+  get name() {
+    return this._name;
   }
 
   get type() {

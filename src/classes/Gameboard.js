@@ -1,11 +1,11 @@
 import Ship from "./Ship.js";
 
 const GAMEBOARD_SIZE_MIN = 0;
-const GAMEBOARD_SIZE_MAX = 9;
+export const GAMEBOARD_SIZE_MAX = 9;
 const BOATS_MAP = [
-  { length: 1, quantity: 4 },
-  { length: 2, quantity: 3 },
-  { length: 3, quantity: 2 },
+  // { length: 1, quantity: 4 },
+  // { length: 2, quantity: 3 },
+  // { length: 3, quantity: 2 },
   { length: 4, quantity: 1 },
 ];
 
@@ -13,7 +13,16 @@ class Gameboard {
   constructor() {
     this._missedCoordinates = [];
     this._missedAttacks = 0;
+    this._allreceivedattacks = [];
     this._ships = this.createInitialShips();
+  }
+
+  get allAttacks() {
+    return this._allreceivedattacks;
+  }
+
+  set allAttacks(coordinate) {
+    this._allreceivedattacks.push(coordinate);
   }
 
   get ships() {
@@ -159,6 +168,7 @@ class Gameboard {
     } else {
       attackedShip.hit();
     }
+    this.allAttacks = coordinate;
   }
 
   allSunk() {

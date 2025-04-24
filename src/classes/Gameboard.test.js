@@ -53,9 +53,10 @@ describe("Gameboard", () => {
     });
   });
 
-  test("it should increase missed attacks/missed coordinates in case of failed attack", () => {
+  test("it should increase missed attacks/missed coordinates/all attacks in case of failed attack", () => {
     gameboard.receiveAttack([0, 9]);
     expect(gameboard.missedAttacks).toBe(1);
+    expect(gameboard.allAttacks).toEqual([[0, 9]]);
     expect(gameboard.missedCoordinates).toEqual([[0, 9]]);
   });
 
