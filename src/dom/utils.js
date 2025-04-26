@@ -56,7 +56,33 @@ function cleanCoordinates() {
 }
 
 export function paintMiniBoats(player) {
-  player.gameboard.ships((ship) => {});
+  let stats = document.querySelector(".stats1");
+  if (player.name === "player2") {
+    stats = document.querySelector(".stats2");
+  }
+
+  let miniBoats = stats.querySelectorAll(".mini-boat");
+  miniBoats.forEach((miniBoat) => {
+    miniBoat.remove();
+  });
+
+  player.gameboard.ships.forEach((ship) => {
+    let miniBoat = document.createElement("div");
+    for (let i = 0; i < ship.length; i++) {
+      let miniBoatPart = document.createElement("div");
+      miniBoatPart.classList.add("mini-boat-part");
+      if (ship.isSunk()) {
+        miniBoatPart.classList.add("sunk");
+      } else {
+        miniBoatPart.classList.add("notsunk");
+      }
+      miniBoat.append(miniBoatPart);
+    }
+
+    miniBoat.classList.add("mini-boat");
+
+    stats.append(miniBoat);
+  });
 }
 
 export function paintCoordinates(player, board) {

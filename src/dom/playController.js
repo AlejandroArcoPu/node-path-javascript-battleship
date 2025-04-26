@@ -92,9 +92,9 @@ function humanAttack(event, player) {
 function computerRandomAttack(board, player) {
   const coordinate = randomCoordinate(player);
   player.gameboard.receiveAttack(coordinate);
-  const rowAttacked = board.querySelector(`#Row${player.name}${coordinate[0]}`);
+  const rowAttacked = board.querySelector(`#Row${player.name}${coordinate[1]}`);
   const colAttacked = rowAttacked.querySelector(
-    `#Col${player.name}${coordinate[1]}`
+    `#Col${player.name}${coordinate[0]}`
   );
   paintAttacked(player, coordinate, colAttacked);
 }
@@ -111,7 +111,7 @@ function foundWinner(player1, player2) {
 
 function gameProcessHumanvsComputer(event, player1, player2, board1, board2) {
   humanAttack(event, player2);
-  paintMiniBoats(player1);
+  paintMiniBoats(player2);
   changeClickableBoardComputer(board2, board1);
   paintTurnMessageComputer(player2);
   let winner = foundWinner(player1, player2);
@@ -121,13 +121,15 @@ function gameProcessHumanvsComputer(event, player1, player2, board1, board2) {
   }
   setTimeout(() => {
     computerRandomAttack(board1, player1);
+    paintMiniBoats(player1);
+
     winner = foundWinner(player1, player2);
     changeClickableBoardComputer(board1, board2);
     paintTurnMessageComputer(player1);
     if (winner) {
       paintWinnerComputer(board1, board2, winner);
     }
-  }, 500);
+  }, 1500);
 }
 
 function getCurrentNonClickable() {
@@ -140,11 +142,11 @@ function getCurrentNonClickable() {
 
 function gameProcessTwoPlayers(event, attackedPlayer, otherPlayer, board) {
   humanAttack(event, attackedPlayer);
+  paintMiniBoats(attackedPlayer);
   const nonClickableBoard = getCurrentNonClickable();
   changeClickableBoardTwoPlayers(board, nonClickableBoard);
   paintTurnMessageTwoPlayers(attackedPlayer);
   let winner = foundWinner(attackedPlayer, otherPlayer);
-  console.log(winner);
   if (winner) {
     paintWinnerTwoPlayers(winner);
   }
@@ -161,12 +163,14 @@ function playControllerTwoPlayers(player1, player2) {
   const playerTitle1 = board1.querySelector(".player-title");
   playerTitle1.textContent = "Player 1️⃣ board";
   createBoard(board1, player1);
+  paintMiniBoats(player1);
 
   const board2 = document.querySelector(".board2");
   const playerTitle2 = board2.querySelector(".player-title");
   playerTitle2.textContent = "Player 2️⃣ board";
 
   createBoard(board2, player2);
+  paintMiniBoats(player2);
   board2.classList.toggle("clickable-board");
 
   const cellBoardElements2 = board2.querySelectorAll(".column-board");
@@ -194,9 +198,11 @@ function playControllerComputer(player1) {
   const board1 = document.querySelector(".board1");
   createBoard(board1, player1);
   paintCoordinates(player1, board1);
+  paintMiniBoats(player1);
 
   const board2 = document.querySelector(".board2");
   createBoard(board2, player2);
+  paintMiniBoats(player2);
   board2.classList.toggle("clickable-board");
 
   const cellBoardElements = board2.querySelectorAll(".column-board");

@@ -246,7 +246,7 @@ fieldset {
 .play-info {
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .round-info {
@@ -266,8 +266,29 @@ fieldset {
   margin-left: 20px;
 }
 
-.statistics-title {
-  text-decoration: underline;
+.stats1,
+.stats2 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.mini-boat {
+  display: flex;
+}
+
+.mini-boat-part {
+  width: 10px;
+  height: 10px;
+}
+
+.sunk {
+  background-color: #461e25;
+  border: 1px solid #ff707f;
+}
+
+.notsunk {
+  background-color: #163323;
+  border: 1px solid #04b755;
 }
 
 .clickable-board .column-board:hover {

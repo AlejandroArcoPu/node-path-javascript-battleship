@@ -2,7 +2,7 @@ import "./styles.css";
 import {
   placeControllerComputer,
   placeControllerTwoPlayerFirst,
-} from "./modules/placeController";
+} from "./dom/placeController";
 
 const placeButton = document.querySelector(".place-button");
 
