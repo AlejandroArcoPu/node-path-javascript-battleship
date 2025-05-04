@@ -9,6 +9,9 @@ class Ship {
     }
     this._length = length;
     this._hits = 0;
+    this._id = Math.random()
+      .toString(36)
+      .replace(/[^a-z]+/g, "");
     this._orientation = "horizontal";
     this._coordinates = this.initCoordinates();
   }
@@ -23,6 +26,10 @@ class Ship {
 
   get orientation() {
     return this._orientation;
+  }
+
+  get id() {
+    return this._id;
   }
 
   set orientation(orientation) {
@@ -57,7 +64,19 @@ class Ship {
         (prevRow === row || prevCol === col)
       );
     });
-    if (!increasingCoordinates) {
+    let decreasingCoordinates = coordinates.every((elem, idx, array) => {
+      if (!idx) return true;
+      let prev = array[idx - 1];
+      let prevRow = prev[0];
+      let prevCol = prev[1];
+      let row = elem[0];
+      let col = elem[1];
+      return (
+        prevRow + prevCol - (row + col) === 1 &&
+        (prevRow === row || prevCol === col)
+      );
+    });
+    if (!increasingCoordinates && !decreasingCoordinates) {
       throw new Error("Invalid coordinates");
     }
     this._coordinates = coordinates;
