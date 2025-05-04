@@ -17,6 +17,11 @@ class Gameboard {
     this._ships = this.createInitialShips();
   }
 
+  getShipById(id) {
+    let result = this._ships.find((ship) => ship.id === id);
+    return result;
+  }
+
   get allAttacks() {
     return this._allreceivedattacks;
   }
@@ -80,9 +85,10 @@ class Gameboard {
     let orientation = Math.round(Math.random());
     let x = Math.floor(Math.random() * GAMEBOARD_SIZE_MAX + 1);
     let y = Math.floor(Math.random() * GAMEBOARD_SIZE_MAX + 1);
+    ship.orientation = orientation === 0 ? "vertical" : "horizontal";
     for (let i = 0; i < ship.length; i++) {
       if (orientation === 0) {
-        newCoordinates.push([x, y + i]);
+        newCoordinates.push([x, y - i]);
       } else {
         newCoordinates.push([x + i, y]);
       }
@@ -147,11 +153,31 @@ class Gameboard {
     this._ships = newRandomShips;
   }
 
-  placeShip(ship, coordinates) {
-    if (!this.areValidCoordinates(coordinates, this._ships)) {
+  generateCoordinatesBasedOnInit(coordinate, ship) {
+    let coordinates = [];
+    let coordinateX = Number(coordinate[0]);
+    let coordinateY = Number(coordinate[1]);
+
+    for (let i = 0; i < ship.length; i++) {
+      if (ship.orientation === "horizontal") {
+        coordinates.push([coordinateX + i, coordinateY]);
+      } else {
+        coordinates.push([coordinateX, coordinateY - i]);
+      }
+    }
+    return coordinates;
+  }
+
+  placeShip(ship, coordinate) {
+    let coordinates = this.generateCoordinatesBasedOnInit(coordinate, ship);
+    let newShips = [...this._ships];
+    let filteredShips = newShips.filter((newShip) => newShip.id !== ship.id);
+    if (!this.areValidCoordinates(coordinates, filteredShips)) {
       throw new Error("Invalid coordinates");
     }
     ship.coordinates = coordinates;
+    filteredShips.push(ship);
+    this._ships = filteredShips;
   }
 
   receiveAttack(coordinate) {

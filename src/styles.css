@@ -2,6 +2,12 @@
   --main-bg-color: #0f0f0f;
   --main-text-color: #ededed;
   --hover-board-color: #0f0f0fb9;
+  --sunk-border: 1px solid #ff707f;
+  --sunk-bg-color: #461e25;
+  --sunk-border-color: #ff707f;
+  --not-sunk-border: 1px solid #04b755;
+  --not-sunk-bg-color: #163323;
+  --not-sunk-border-color: #04b755;
 }
 *,
 *::after,
@@ -20,6 +26,7 @@ body {
   font-family: "Shadows Into Light", sans-serif;
   background-color: var(--main-bg-color);
   color: var(--main-text-color);
+  user-select: none;
 }
 
 img,
@@ -194,6 +201,12 @@ fieldset {
   gap: 20px;
 }
 
+.board,
+.board1-place,
+.board2-place {
+  position: relative;
+}
+
 .boards {
   display: flex;
   justify-content: space-between;
@@ -215,6 +228,30 @@ fieldset {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.draggable {
+  position: absolute;
+  cursor: move;
+  z-index: 2;
+  border: 3px solid rgba(128, 96, 255, 1);
+  background-color: rgba(128, 96, 255, 0.2);
+}
+
+.draggable.valid {
+  border: 4px solid var(--not-sunk-border-color);
+  background-color: var(--not-sunk-bg-color);
+}
+
+.draggable.invalid {
+  border: 4px solid var(--sunk-border-color);
+  background-color: var(--sunk-bg-color);
+}
+
+#drop-target {
+  border: 1px solid white;
+  width: 200px;
+  height: 200px;
 }
 
 .col-number-elements {
@@ -282,13 +319,13 @@ fieldset {
 }
 
 .sunk {
-  background-color: #461e25;
-  border: 1px solid #ff707f;
+  background-color: var(--sunk-bg-color);
+  border: var(--sunk-border);
 }
 
-.notsunk {
-  background-color: #163323;
-  border: 1px solid #04b755;
+.not-sunk {
+  background-color: var(--not-sunk-bg-color);
+  border: var(--not-sunk-border);
 }
 
 .clickable-board .column-board:hover {

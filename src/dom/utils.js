@@ -28,31 +28,28 @@ export function createBoard(board, player) {
 }
 
 function addBoardNumbers(board) {
-  const colNumberElements = document.createElement("div");
-  colNumberElements.classList.add("col-number-elements");
-  for (let j = 0; j <= GAMEBOARD_SIZE_MAX; j++) {
-    const colNumberElement = document.createElement("div");
-    colNumberElement.textContent = j;
-    colNumberElements.append(colNumberElement);
-    colNumberElement.classList.add("col-number");
-  }
-
-  board.append(colNumberElements);
-  const rowsInBoard = board.querySelectorAll(".row-board");
-  rowsInBoard.forEach((row) => {
-    const rowNumber = row.id.match(/\d+/)[0][1];
-    const rowNumberElement = document.createElement("div");
-    rowNumberElement.classList.add("row-number");
-    rowNumberElement.textContent = rowNumber;
-    row.prepend(rowNumberElement);
-  });
+  // const colNumberElements = document.createElement("div");
+  // colNumberElements.classList.add("col-number-elements");
+  // for (let j = 0; j <= GAMEBOARD_SIZE_MAX; j++) {
+  //   const colNumberElement = document.createElement("div");
+  //   colNumberElement.textContent = j;
+  //   colNumberElements.append(colNumberElement);
+  //   colNumberElement.classList.add("col-number");
+  // }
+  // board.append(colNumberElements);
+  // const rowsInBoard = board.querySelectorAll(".row-board");
+  // rowsInBoard.forEach((row) => {
+  //   const rowNumber = row.id.match(/\d+/)[0][1];
+  //   const rowNumberElement = document.createElement("div");
+  //   rowNumberElement.classList.add("row-number");
+  //   rowNumberElement.textContent = rowNumber;
+  //   row.prepend(rowNumberElement);
+  // });
 }
 
-function cleanCoordinates() {
-  const alreadyPainted = document.querySelectorAll(".coordinate-painted");
-  alreadyPainted.forEach((painted) =>
-    painted.classList.remove("coordinate-painted")
-  );
+function cleanElementClass(cls) {
+  const coordinates = document.querySelectorAll(`.${cls}`);
+  coordinates.forEach((coordinate) => coordinate.classList.remove(cls));
 }
 
 export function paintMiniBoats(player) {
@@ -74,7 +71,7 @@ export function paintMiniBoats(player) {
       if (ship.isSunk()) {
         miniBoatPart.classList.add("sunk");
       } else {
-        miniBoatPart.classList.add("notsunk");
+        miniBoatPart.classList.add("not-sunk");
       }
       miniBoat.append(miniBoatPart);
     }
@@ -85,18 +82,59 @@ export function paintMiniBoats(player) {
   });
 }
 
+function removeElementsByClass(cls) {
+  document.querySelectorAll(cls).forEach((element) => {
+    element.remove();
+  });
+}
+
 export function paintCoordinates(player, board) {
-  cleanCoordinates();
   player.gameboard.ships.forEach((ship) => {
-    ship.coordinates.forEach((coordinate) => {
-      const x = coordinate[0];
-      const y = coordinate[1];
-      const coordinateXElem = board.querySelector(`#Row${player.name}${y}`);
+    for (let i = 0; i < ship.length; i++) {
+      const x1 = ship.coordinates[i][0];
+      const y1 = ship.coordinates[i][1];
+      const coordinateXElem = board.querySelector(`#Row${player.name}${y1}`);
       const coordinateYElem = coordinateXElem.querySelector(
-        `#Col${player.name}${x}`
+        `#Col${player.name}${x1}`
       );
       coordinateYElem.classList.add("coordinate-painted");
-    });
+    }
+  });
+}
+
+export function placeCoordinates(player, board) {
+  removeElementsByClass(".draggable");
+  player.gameboard.ships.forEach((ship) => {
+    for (let i = 0; i < ship.length; i++) {
+      const x1 = ship.coordinates[i][0];
+      const y1 = ship.coordinates[i][1];
+      const coordinateXElem = board.querySelector(`#Row${player.name}${y1}`);
+      const coordinateYElem = coordinateXElem.querySelector(
+        `#Col${player.name}${x1}`
+      );
+      if (i === 0) {
+        const shipElement = document.createElement("div");
+        shipElement.setAttribute("position", ship.orientation);
+        shipElement.setAttribute("length", ship.length);
+        shipElement.classList.add("draggable");
+        shipElement.id = ship.id;
+        let width = null;
+        let height = null;
+        if (ship.orientation === "horizontal") {
+          width = 40 * ship.length;
+          shipElement.style.width = `${width}px`;
+          shipElement.style.height = "40px";
+          shipElement.style.top = `${(GAMEBOARD_SIZE_MAX - y1) * 40}px`;
+        } else {
+          height = 40 * ship.length;
+          shipElement.style.width = "40px";
+          shipElement.style.height = `${height}px`;
+          shipElement.style.top = `${(GAMEBOARD_SIZE_MAX - y1) * 40}px`;
+        }
+        shipElement.style.left = `${x1 * 40}px`;
+        coordinateYElem.append(shipElement); // include the draggable in the div
+      }
+    }
   });
 }
 
