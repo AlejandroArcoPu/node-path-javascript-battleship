@@ -1,0 +1,16 @@
+name: GitHub Page Deployment
+run-name: ${{ github.actor }} is deploying to GitHub Pages 🚀
+on:
+  push:
+    branches:
+      - master
+jobs:
+  GitHub-Page-Deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - run: npm run build
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
