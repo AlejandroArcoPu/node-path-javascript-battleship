@@ -39,6 +39,7 @@ function validBoardPlace(length, event, position, player, shipId) {
 }
 
 function initDrag(event, player) {
+  console.log("aqui");
   if ([...event.target.classList].includes("draggable")) {
     let dragged = event.target;
     let shipId = event.target.id;
@@ -95,6 +96,16 @@ function initDrag(event, player) {
   }
 }
 
+function randomCoordinates(player, board, playButton) {
+  playButton.disabled = false;
+  player.gameboard.placeRandomShips();
+  placeCoordinates(player, board);
+  const sourcesDrag = document.querySelectorAll(".draggable");
+  sourcesDrag.forEach((draggable) => {
+    draggable.addEventListener("mousedown", (event) => initDrag(event, player));
+  });
+}
+
 function placeControllerComputer() {
   removeChild(".board");
   notDisplay(".mode");
@@ -108,23 +119,18 @@ function placeControllerComputer() {
   const randomizeButton = document.querySelector(".randomize-button");
   const playButton = document.querySelector(".play-button");
 
-  randomizeButton.addEventListener("click", () => {
-    playButton.disabled = false;
-    player1.gameboard.placeRandomShips();
-    placeCoordinates(player1, board);
-    const sourcesDrag = document.querySelectorAll(".draggable");
-    sourcesDrag.forEach((draggable) => {
-      draggable.addEventListener("mousedown", (event) =>
-        initDrag(event, player1)
-      );
-    });
-  });
+  function handleRandomizeClick() {
+    randomCoordinates(player1, board, playButton);
+  }
 
-  playButton.addEventListener("click", () => {
-    if (!playButton.disabled) {
-      playControllerComputer(player1);
-    }
-  });
+  function handlePlayClick() {
+    randomizeButton.removeEventListener("click", handleRandomizeClick);
+    playControllerComputer(player1);
+    playButton.removeEventListener("click", handlePlayClick);
+  }
+
+  randomizeButton.addEventListener("click", handleRandomizeClick);
+  playButton.addEventListener("click", handlePlayClick);
 }
 
 function placeControllerTwoPlayerSecond(player1) {
@@ -142,21 +148,19 @@ function placeControllerTwoPlayerSecond(player1) {
   const randomizeButton = document.querySelector(".randomize-place2-button");
   const play2Button = document.querySelector(".play2-button");
 
-  randomizeButton.addEventListener("click", () => {
-    play2Button.disabled = false;
-    player2.gameboard.placeRandomShips();
-    placeCoordinates(player2, board);
-    const sourcesDrag = document.querySelectorAll(".draggable");
-    sourcesDrag.forEach((draggable) => {
-      draggable.addEventListener("mousedown", (event) =>
-        initDrag(event, player2)
-      );
-    });
-  });
+  function handleRandomizeClick() {
+    randomCoordinates(player2, board, play2Button);
+  }
 
-  play2Button.addEventListener("click", () =>
-    playControllerTwoPlayers(player1, player2)
-  );
+  randomizeButton.addEventListener("click", handleRandomizeClick);
+
+  function handlePlayClick() {
+    randomizeButton.removeEventListener("click", handleRandomizeClick);
+    playControllerTwoPlayers(player1, player2);
+    play2Button.removeEventListener("click", handlePlayClick);
+  }
+
+  play2Button.addEventListener("click", handlePlayClick);
 }
 
 function placeControllerTwoPlayerFirst() {
@@ -171,21 +175,19 @@ function placeControllerTwoPlayerFirst() {
   const randomizeButton = document.querySelector(".randomize-place1-button");
   const player2Button = document.querySelector(".player2-button");
 
-  randomizeButton.addEventListener("click", () => {
-    player2Button.disabled = false;
-    player1.gameboard.placeRandomShips();
-    placeCoordinates(player1, board);
-    const sourcesDrag = document.querySelectorAll(".draggable");
-    sourcesDrag.forEach((draggable) => {
-      draggable.addEventListener("mousedown", (event) =>
-        initDrag(event, player1)
-      );
-    });
-  });
+  function handleRandomizeClick() {
+    randomCoordinates(player1, board, player2Button);
+  }
 
-  player2Button.addEventListener("click", () =>
-    placeControllerTwoPlayerSecond(player1)
-  );
+  randomizeButton.addEventListener("click", handleRandomizeClick);
+
+  function handlePlayer2Click() {
+    randomizeButton.removeEventListener("click", handleRandomizeClick);
+    placeControllerTwoPlayerSecond(player1);
+    player2Button.removeEventListener("click", handlePlayer2Click);
+  }
+
+  player2Button.addEventListener("click", handlePlayer2Click);
 }
 
 export { placeControllerComputer, placeControllerTwoPlayerFirst };

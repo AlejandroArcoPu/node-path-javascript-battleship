@@ -10,7 +10,6 @@ import {
   paintCoordinates,
   randomCoordinate,
   paintMiniBoats,
-  removeChild,
 } from "./utils";
 
 function paintTurnMessageComputer(player) {
@@ -137,7 +136,7 @@ function gameProcessHumanvsComputer(event, player1, player2, board1, board2) {
     if (winner) {
       paintWinnerComputer(board1, board2, winner);
     }
-  }, 500);
+  }, 1500);
 }
 
 function getCurrentNonClickable() {
