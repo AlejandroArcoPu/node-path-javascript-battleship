@@ -24,32 +24,23 @@ export function createBoard(board, player) {
     }
     board.append(rowBoard);
   }
-  addBoardNumbers(board);
 }
 
-function addBoardNumbers(board) {
-  // const colNumberElements = document.createElement("div");
-  // colNumberElements.classList.add("col-number-elements");
-  // for (let j = 0; j <= GAMEBOARD_SIZE_MAX; j++) {
-  //   const colNumberElement = document.createElement("div");
-  //   colNumberElement.textContent = j;
-  //   colNumberElements.append(colNumberElement);
-  //   colNumberElement.classList.add("col-number");
-  // }
-  // board.append(colNumberElements);
-  // const rowsInBoard = board.querySelectorAll(".row-board");
-  // rowsInBoard.forEach((row) => {
-  //   const rowNumber = row.id.match(/\d+/)[0][1];
-  //   const rowNumberElement = document.createElement("div");
-  //   rowNumberElement.classList.add("row-number");
-  //   rowNumberElement.textContent = rowNumber;
-  //   row.prepend(rowNumberElement);
-  // });
-}
-
-function cleanElementClass(cls) {
-  const coordinates = document.querySelectorAll(`.${cls}`);
-  coordinates.forEach((coordinate) => coordinate.classList.remove(cls));
+export function addBoardNumbers(board) {
+  // columns and rows number = 2
+  for (let i = 0; i < 2; i++) {
+    const numberElements = document.createElement("div");
+    if (i === 0) numberElements.classList.add("col-number-elements");
+    else numberElements.classList.add("row-number-elements");
+    for (let j = 0; j <= GAMEBOARD_SIZE_MAX; j++) {
+      const numberElement = document.createElement("div");
+      numberElement.textContent = j;
+      numberElements.append(numberElement);
+      if (i === 0) numberElement.classList.add("row-number");
+      else numberElement.classList.add("col-number");
+    }
+    board.append(numberElements);
+  }
 }
 
 export function paintMiniBoats(player) {
@@ -82,10 +73,14 @@ export function paintMiniBoats(player) {
   });
 }
 
-function removeElementsByClass(cls) {
+function removeElements(cls) {
   document.querySelectorAll(cls).forEach((element) => {
     element.remove();
   });
+}
+
+export function removeChild(cls) {
+  document.querySelector(cls).innerHTML = "";
 }
 
 export function paintCoordinates(player, board) {
@@ -103,7 +98,7 @@ export function paintCoordinates(player, board) {
 }
 
 export function placeCoordinates(player, board) {
-  removeElementsByClass(".draggable");
+  removeElements(".draggable");
   player.gameboard.ships.forEach((ship) => {
     for (let i = 0; i < ship.length; i++) {
       const x1 = ship.coordinates[i][0];
@@ -136,19 +131,6 @@ export function placeCoordinates(player, board) {
       }
     }
   });
-}
-
-export function showStatistics(player) {
-  const missedAttacksElement = document.querySelector(
-    `.${player.name}-missed-attacks`
-  );
-  const missedCoordinatesElement = document.querySelector(
-    `.${player.name}-missed-coordinates`
-  );
-  missedAttacksElement.textContent =
-    "Missed attacks: " + player.gameboard.missedAttacks;
-  missedCoordinatesElement.textContent =
-    "Missed coordinates: " + player.gameboard.missedCoordinates;
 }
 
 export function randomCoordinate(player) {

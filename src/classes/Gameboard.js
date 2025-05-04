@@ -3,9 +3,9 @@ import Ship from "./Ship.js";
 const GAMEBOARD_SIZE_MIN = 0;
 export const GAMEBOARD_SIZE_MAX = 9;
 const BOATS_MAP = [
-  { length: 1, quantity: 4 },
-  { length: 2, quantity: 3 },
-  { length: 3, quantity: 2 },
+  // { length: 1, quantity: 4 },
+  // { length: 2, quantity: 3 },
+  // { length: 3, quantity: 2 },
   { length: 4, quantity: 1 },
 ];
 
@@ -177,7 +177,7 @@ class Gameboard {
     }
     ship.coordinates = coordinates;
     filteredShips.push(ship);
-    this._ships = filteredShips;
+    this._ships = filteredShips.sort((a, b) => a.length - b.length);
   }
 
   receiveAttack(coordinate) {

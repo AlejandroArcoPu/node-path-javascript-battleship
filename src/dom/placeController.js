@@ -1,6 +1,13 @@
 import Player from "../classes/Player.js";
 import { GAMEBOARD_SIZE_MAX } from "../classes/Gameboard.js";
-import { display, notDisplay, createBoard, placeCoordinates } from "./utils.js";
+import {
+  display,
+  notDisplay,
+  createBoard,
+  placeCoordinates,
+  addBoardNumbers,
+  removeChild,
+} from "./utils.js";
 import {
   playControllerComputer,
   playControllerTwoPlayers,
@@ -89,12 +96,14 @@ function initDrag(event, player) {
 }
 
 function placeControllerComputer() {
+  removeChild(".board");
   notDisplay(".mode");
   display(".place");
 
   let player1 = new Player("player1", "human");
   const board = document.querySelector(".board");
   createBoard(board, player1);
+  addBoardNumbers(board);
 
   const randomizeButton = document.querySelector(".randomize-button");
   const playButton = document.querySelector(".play-button");
@@ -114,20 +123,21 @@ function placeControllerComputer() {
   playButton.addEventListener("click", () => {
     if (!playButton.disabled) {
       playControllerComputer(player1);
-      // sourcesDrag.forEach((draggable) => {
-      //   draggable.removeEventListener()
-      // }) remove event listener of drag
     }
   });
 }
 
 function placeControllerTwoPlayerSecond(player1) {
+  removeChild(".board1-place");
+  removeChild(".board2-place");
+
   notDisplay(".place1");
   display(".place2");
 
   let player2 = new Player("player2", "human");
   const board = document.querySelector(".board2-place");
   createBoard(board, player2);
+  addBoardNumbers(board);
 
   const randomizeButton = document.querySelector(".randomize-place2-button");
   const play2Button = document.querySelector(".play2-button");
@@ -156,6 +166,7 @@ function placeControllerTwoPlayerFirst() {
   let player1 = new Player("player1", "human");
   const board = document.querySelector(".board1-place");
   createBoard(board, player1);
+  addBoardNumbers(board);
 
   const randomizeButton = document.querySelector(".randomize-place1-button");
   const player2Button = document.querySelector(".player2-button");
