@@ -119,9 +119,6 @@ fieldset {
   background-color: var(--main-bg-color);
   color: var(--main-text-color);
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .mode-span:hover {
@@ -147,8 +144,6 @@ fieldset {
 .player2-button,
 .play2-button,
 .randomize-place2-button {
-  display: flex;
-  gap: 5px;
   padding: 10px 20px;
   border-radius: 10px;
   cursor: pointer;
@@ -417,5 +412,11 @@ footer {
   }
   100% {
     scale: 100%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  body {
+    background-color: lightblue;
   }
 }

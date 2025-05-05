@@ -39,7 +39,6 @@ function validBoardPlace(length, event, position, player, shipId) {
 }
 
 function initDrag(event, player) {
-  console.log("aqui");
   if ([...event.target.classList].includes("draggable")) {
     let dragged = event.target;
     let shipId = event.target.id;
