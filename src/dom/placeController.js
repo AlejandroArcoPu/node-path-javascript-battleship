@@ -49,7 +49,7 @@ function initDrag(event, player) {
 
     const columnBoards = document.querySelectorAll(".column-board");
     columnBoards.forEach((column) => {
-      column.addEventListener("mouseover", (event) => {
+      column.addEventListener("pointerover", (event) => {
         event.preventDefault();
         if (dragged) {
           dragged.style.top = `${event.target.offsetTop}px`;
@@ -64,7 +64,7 @@ function initDrag(event, player) {
           }
         }
       });
-      column.addEventListener("mouseup", (event) => {
+      column.addEventListener("pointerup", (event) => {
         event.preventDefault();
         if (dragged) {
           if (validBoardPlace(length, event, position, player, shipId)) {
