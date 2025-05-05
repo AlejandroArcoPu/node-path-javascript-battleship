@@ -110,7 +110,7 @@ fieldset {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 30px;
 }
 
 .mode-span {
@@ -416,7 +416,40 @@ footer {
 }
 
 @media only screen and (max-width: 600px) {
-  body {
-    background-color: lightblue;
+  fieldset {
+    gap: 10px;
+    padding: 0px;
+  }
+
+  main {
+    padding: 0px;
+  }
+
+  .mode,
+  .mode,
+  .place,
+  .play,
+  .place1,
+  .place2 {
+    padding: 10px;
+    font-size: 0.8rem;
+  }
+
+  .mode-span {
+    padding: 5px 10px;
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+  header {
+    font-size: 1.8rem;
+  }
+  .mode,
+  .mode,
+  .place,
+  .play,
+  .place1,
+  .place2 {
+    font-size: 1.3rem;
   }
 }
