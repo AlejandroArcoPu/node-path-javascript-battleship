@@ -49,7 +49,7 @@ function initDrag(event, player) {
 
     const columnBoards = document.querySelectorAll(".column-board");
     columnBoards.forEach((column) => {
-      column.addEventListener("pointerover", (event) => {
+      column.addEventListener("touchmove", (event) => {
         event.preventDefault();
         if (dragged) {
           dragged.style.top = `${event.target.offsetTop}px`;
@@ -64,7 +64,7 @@ function initDrag(event, player) {
           }
         }
       });
-      column.addEventListener("pointerup", (event) => {
+      column.addEventListener("touchend", (event) => {
         event.preventDefault();
         if (dragged) {
           if (validBoardPlace(length, event, position, player, shipId)) {
@@ -101,7 +101,7 @@ function randomCoordinates(player, board, playButton) {
   placeCoordinates(player, board);
   const sourcesDrag = document.querySelectorAll(".draggable");
   sourcesDrag.forEach((draggable) => {
-    draggable.addEventListener("pointerdown", (event) =>
+    draggable.addEventListener("touchstart", (event) =>
       initDrag(event, player)
     );
   });
