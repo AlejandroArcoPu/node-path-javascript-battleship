@@ -10,6 +10,7 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+      - run: npm i
       - name: Build static files
         id: build
         run: npm run build
