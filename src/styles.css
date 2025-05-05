@@ -23,7 +23,7 @@ body {
   gap: 20px;
   min-height: 100vh;
   line-height: 1.5;
-  font-family: "Shadows Into Light", sans-serif;
+  font-family: "Shadows Into Light", "Comic Sans MS", sans-serif;
   background-color: var(--main-bg-color);
   color: var(--main-text-color);
   user-select: none;

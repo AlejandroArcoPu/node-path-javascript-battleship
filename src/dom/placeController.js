@@ -101,7 +101,9 @@ function randomCoordinates(player, board, playButton) {
   placeCoordinates(player, board);
   const sourcesDrag = document.querySelectorAll(".draggable");
   sourcesDrag.forEach((draggable) => {
-    draggable.addEventListener("mousedown", (event) => initDrag(event, player));
+    draggable.addEventListener("pointerdown", (event) =>
+      initDrag(event, player)
+    );
   });
 }
 
