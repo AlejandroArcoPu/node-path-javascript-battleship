@@ -34,7 +34,7 @@ function paintWinnerTwoPlayers(winner) {
   roundElement.classList.add("winner");
   roundElement.textContent =
     winner === "player1" ? "Player 1️⃣ wins!" : "Player 2️⃣ wins!";
-  restartElement.classList.remove("not-display");
+  restartElement.classList.remove("move-not-display");
 }
 
 function paintWinnerComputer(board1, board2, winner) {
@@ -46,7 +46,7 @@ function paintWinnerComputer(board1, board2, winner) {
 
   board1.classList.add("disabled");
   board2.classList.add("disabled");
-  restartElement.classList.remove("not-display");
+  restartElement.classList.remove("move-not-display");
 }
 
 function changeClickableBoardTwoPlayers(currentBoard, newBoard) {
@@ -136,7 +136,7 @@ function gameProcessHumanvsComputer(event, player1, player2, board1, board2) {
     if (winner) {
       paintWinnerComputer(board1, board2, winner);
     }
-  }, 1500);
+  }, 500);
 }
 
 function getCurrentNonClickable() {
@@ -210,8 +210,21 @@ function restartToPlaceTwoPlayers() {
 }
 
 function initPlay() {
+  const playerInfo1 = document.createElement("div");
+  playerInfo1.classList.add("player-info1");
+  const stats1 = document.createElement("div");
+  stats1.classList.add("stats1");
+
+  const playerInfo2 = document.createElement("div");
+  playerInfo2.classList.add("player-info2");
+  const stats2 = document.createElement("div");
+  stats2.classList.add("stats2");
+
+  playerInfo1.append(stats1);
+  playerInfo2.append(stats2);
+
   const restartElement = document.querySelector(".restart-button");
-  restartElement.classList.add("not-display");
+  restartElement.classList.add("move-not-display");
 
   const roundElement = document.querySelector(".round-info");
   roundElement.classList.remove("winner");
@@ -225,7 +238,7 @@ function initPlay() {
   const titleBoard1 = document.createElement("h3");
   titleBoard1.classList.add("player-title");
   titleBoard1.innerHTML = "Your board 👤";
-  newBoard1.append(titleBoard1);
+  playerInfo1.append(titleBoard1);
 
   const board2 = document.querySelector(".board2");
   if (board2) board2.remove();
@@ -235,9 +248,12 @@ function initPlay() {
   const titleBoard2 = document.createElement("h3");
   titleBoard2.classList.add("player-title");
   titleBoard2.innerHTML = "Opponent board 🖥️";
-  newBoard2.append(titleBoard2);
+  playerInfo2.append(titleBoard2);
 
   const boards = document.querySelector(".boards");
+
+  newBoard1.append(playerInfo1);
+  newBoard2.append(playerInfo2);
 
   boards.prepend(newBoard1);
   boards.append(newBoard2);
