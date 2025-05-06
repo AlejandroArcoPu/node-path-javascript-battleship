@@ -442,20 +442,20 @@ footer {
     padding: 10px;
   }
 
-  .mode,
   .place,
   .play,
   .place1,
-  .place2 {
-    padding: 35px;
-    font-size: 0.8rem;
-  }
-
+  .place2,
   .mode {
     padding: 10px;
     font-size: 0.8rem;
   }
 
+  .place,
+  .place1,
+  .place2 {
+    padding: 25px;
+  }
   .mode-span {
     padding: 2px 8px;
   }
@@ -468,6 +468,14 @@ footer {
   .column-board {
     width: 28px;
     height: 28px;
+  }
+
+  .row-number-elements {
+    left: -30px;
+  }
+
+  .col-number-elements {
+    bottom: -30px;
   }
 
   .boards {
