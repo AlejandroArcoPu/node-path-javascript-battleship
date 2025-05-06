@@ -290,13 +290,6 @@ fieldset {
   border: 2px solid #8060ff;
 }
 
-.play-info,
-.stats {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
 .round-info {
   font-size: 1.5rem;
   border: 1px solid var(--main-text-color);
