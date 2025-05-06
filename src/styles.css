@@ -68,7 +68,7 @@ header {
 }
 
 main {
-  padding: 40px;
+  padding: 20px 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -83,9 +83,9 @@ fieldset {
 
 .mode,
 .place,
-.play,
 .place1,
-.place2 {
+.place2,
+.play {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -95,15 +95,16 @@ fieldset {
   padding: 30px;
 }
 
+.play {
+  width: 100%;
+  max-width: 1100px;
+  position: relative;
+}
+
 .place,
 .place1,
 .place2 {
   padding: 50px;
-}
-
-.play {
-  width: 1050px;
-  gap: 20px;
 }
 
 .mode-buttons-div {
@@ -206,10 +207,11 @@ fieldset {
 }
 
 .boards {
-  display: flex;
-  justify-content: space-between;
-  gap: 30px;
   width: 100%;
+  display: grid;
+  justify-items: center;
+  gap: 50px;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
 }
 
 .row-board {
@@ -288,19 +290,12 @@ fieldset {
   border: 2px solid #8060ff;
 }
 
-.play-info {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
-
 .round-info {
   font-size: 1.5rem;
   border: 1px solid var(--main-text-color);
   padding: 10px;
   border-radius: 10px;
-  display: flex;
-  align-items: center;
+  justify-self: center;
 }
 
 .player-title {
@@ -313,7 +308,9 @@ fieldset {
 .stats1,
 .stats2 {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 50px);
+  gap: 5px;
+  justify-self: right;
 }
 
 .mini-boat {
@@ -377,6 +374,11 @@ fieldset {
   gap: 5px;
   background-color: #162f44;
   color: #7db4ff;
+  position: absolute;
+  top: 25px;
+  left: 5px;
+  transform: rotate(-20deg);
+  transition: margin-left 1s;
 }
 
 .restart-button:hover {
@@ -384,6 +386,10 @@ fieldset {
 }
 .not-display {
   display: none;
+}
+
+.move-not-display {
+  margin-left: -1000px;
 }
 
 footer {
@@ -417,8 +423,12 @@ footer {
 
 @media only screen and (max-width: 600px) {
   fieldset {
-    gap: 10px;
+    gap: 5px;
     padding: 0px;
+  }
+
+  .round-info {
+    font-size: 1.1rem;
   }
 
   main {
@@ -426,17 +436,35 @@ footer {
   }
 
   .mode,
-  .mode,
   .place,
   .play,
   .place1,
   .place2 {
-    padding: 10px;
+    padding: 35px;
+    font-size: 0.8rem;
+  }
+
+  .mode {
+    padding: 20px;
     font-size: 0.8rem;
   }
 
   .mode-span {
-    padding: 5px 10px;
+    padding: 2px 8px;
+  }
+
+  .row-board {
+    width: 280px;
+    height: 28px;
+  }
+
+  .column-board {
+    width: 28px;
+    height: 28px;
+  }
+
+  .boards {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
 }
 

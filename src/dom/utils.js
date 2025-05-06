@@ -107,6 +107,7 @@ export function placeCoordinates(player, board) {
       const coordinateYElem = coordinateXElem.querySelector(
         `#Col${player.name}${x1}`
       );
+      const initialSize = coordinateYElem.computedStyleMap().get("width").value;
       if (i === 0) {
         const shipElement = document.createElement("div");
         shipElement.setAttribute("position", ship.orientation);
@@ -116,17 +117,21 @@ export function placeCoordinates(player, board) {
         let width = null;
         let height = null;
         if (ship.orientation === "horizontal") {
-          width = 40 * ship.length;
+          width = initialSize * ship.length;
           shipElement.style.width = `${width}px`;
-          shipElement.style.height = "40px";
-          shipElement.style.top = `${(GAMEBOARD_SIZE_MAX - y1) * 40}px`;
+          shipElement.style.height = `${initialSize}px`;
+          shipElement.style.top = `${
+            (GAMEBOARD_SIZE_MAX - y1) * initialSize
+          }px`;
         } else {
-          height = 40 * ship.length;
-          shipElement.style.width = "40px";
+          height = initialSize * ship.length;
+          shipElement.style.width = `${initialSize}px`;
           shipElement.style.height = `${height}px`;
-          shipElement.style.top = `${(GAMEBOARD_SIZE_MAX - y1) * 40}px`;
+          shipElement.style.top = `${
+            (GAMEBOARD_SIZE_MAX - y1) * initialSize
+          }px`;
         }
-        shipElement.style.left = `${x1 * 40}px`;
+        shipElement.style.left = `${x1 * initialSize}px`;
         coordinateYElem.append(shipElement); // include the draggable in the div
       }
     }
